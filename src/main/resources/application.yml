@@ -1,0 +1,8 @@
+db:
+  url: ${DATABASE_URL:postgresql://localhost:5433/mocchi-brand}
+  username: ${JDBC_DATABASE_USERNAME:mocchi-brand}
+  password: ${JDBC_DATABASE_PASSWORD:mocchi-brand}
+
+auth0:
+  clientId: ${AUTH_CLIENT_ID}
+  clientSecret: ${AUTH_CLIENT_SECRET}
