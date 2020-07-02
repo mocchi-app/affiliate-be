@@ -20,7 +20,8 @@ class SecurityConfiguration {
             .formLogin().disable()
             .authorizeExchange()
             .pathMatchers(
-                "/passwordless/start"
+                "/passwordless/start",
+                "/oauth/token"
             ).permitAll()
             .pathMatchers(
                 "/v2/api-docs",
