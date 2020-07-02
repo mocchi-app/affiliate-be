@@ -5,7 +5,10 @@ plugins {
     id 'org.springframework.boot' version '2.3.1.RELEASE'
     id "org.jetbrains.kotlin.plugin.spring" version "1.3.72"
     id "org.flywaydb.flyway" version "6.4.4"
+    id 'com.bmuschko.docker-remote-api' version '6.4.0'
 }
+
+import com.bmuschko.gradle.docker.tasks.image.*
 
 group 'org.mocchi.affiliate'
 version '1.0-SNAPSHOT'
@@ -76,8 +79,13 @@ compileTestKotlin {
 }
 
 flyway {
-    url = 'jdbc:postgresql://localhost:5432/mocchi'
-    user = 'mocchi'
-    password = 'mocchi'
+    url = 'jdbc:postgresql://localhost:5432/mocchi-affiliate'
+    user = 'mocchi-affiliate'
+    password = 'mocchi-affiliate'
     schemas = ['public']
+}
+
+task buildBrandImage(type: DockerBuildImage) {
+    inputDir = file('.')
+    images.add('docker.pkg.github.com/affiliate-app/affiliate-be/affiliate-be:latest')
 }
