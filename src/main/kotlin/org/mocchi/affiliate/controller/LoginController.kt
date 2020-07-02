@@ -1,6 +1,8 @@
 package org.mocchi.affiliate.controller
 
 import org.mocchi.affiliate.model.client.PasswordlessStartResponse
+import org.mocchi.affiliate.model.client.TokenResponse
+import org.mocchi.affiliate.model.dto.ConfirmCodeDto
 import org.mocchi.affiliate.model.dto.PasswordlessDto
 import org.mocchi.affiliate.service.Auth0Service
 import org.springframework.web.bind.annotation.PostMapping
@@ -17,4 +19,9 @@ class LoginController(
         @RequestBody passwordlessDto: PasswordlessDto
     ): PasswordlessStartResponse =
         auth0Service.startPasswordlessVerification(passwordlessDto)
+
+    @PostMapping("/oauth/token")
+    suspend fun getToken(
+        @RequestBody confirmCodeDto: ConfirmCodeDto
+    ): TokenResponse = auth0Service.getToken(confirmCodeDto)
 }
