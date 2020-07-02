@@ -87,5 +87,5 @@ flyway {
 
 task buildAffiliateImage(type: DockerBuildImage) {
     inputDir = file('.')
-    images.add('docker.pkg.github.com/affiliate-app/affiliate-be/affiliate-be:latest')
+    images.add('docker.pkg.github.com/mocchi-app/affiliate-be/affiliate-be:latest')
 }
