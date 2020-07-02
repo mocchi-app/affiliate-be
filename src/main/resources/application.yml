@@ -1,8 +1,18 @@
 db:
-  url: ${DATABASE_URL:postgresql://localhost:5433/mocchi-brand}
-  username: ${JDBC_DATABASE_USERNAME:mocchi-brand}
-  password: ${JDBC_DATABASE_PASSWORD:mocchi-brand}
+  url: ${DATABASE_URL:postgresql://localhost:5434/mocchi-affiliate}
+  username: ${JDBC_DATABASE_USERNAME:mocchi-affiliate}
+  password: ${JDBC_DATABASE_PASSWORD:mocchi-affiliate}
+
 
 auth0:
+  domain: ${AUTH_DOMAIN}
   clientId: ${AUTH_CLIENT_ID}
   clientSecret: ${AUTH_CLIENT_SECRET}
+
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: https://mocchi.us.auth0.com/.well-known/jwks.json
+          issuer-uri: https://mocchi.us.auth0.com/
