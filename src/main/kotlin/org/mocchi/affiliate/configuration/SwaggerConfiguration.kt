@@ -25,7 +25,7 @@ class SwaggerConfig {
     fun documentation(): Docket = Docket(DocumentationType.SWAGGER_2)
             .useDefaultResponseMessages(false)
             .select()
-            .apis(RequestHandlerSelectors.basePackage("org.mocchi.brand"))
+            .apis(RequestHandlerSelectors.basePackage("org.mocchi.affiliate"))
             .paths(PathSelectors.any())
             .build()
             .pathMapping("/")
