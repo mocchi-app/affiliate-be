@@ -24,3 +24,9 @@ jobs:
       run: chmod +x gradlew
     - name: Build with Gradle
       run: ./gradlew build
+    - name: Build the Docker image
+      if: github.ref == 'refs/heads/master'
+      run: docker login docker.pkg.github.com -u sausageRoll -p ${{ secrets.GITHUB_TOKEN }} && ./gradlew buildaffiliateImage
+    - name: Publish the Docker image
+      if: github.ref == 'refs/heads/master'
+      run: docker push docker.pkg.github.com/mocchi-app/affiliate-be/affiliate-be:latest
