@@ -85,7 +85,7 @@ flyway {
     schemas = ['public']
 }
 
-task buildBrandImage(type: DockerBuildImage) {
+task buildAffiliateImage(type: DockerBuildImage) {
     inputDir = file('.')
     images.add('docker.pkg.github.com/affiliate-app/affiliate-be/affiliate-be:latest')
 }
