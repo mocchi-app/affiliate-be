@@ -14,5 +14,5 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          jwk-set-uri: https://mocchi.us.auth0.com/.well-known/jwks.json
-          issuer-uri: https://mocchi.us.auth0.com/
+          jwk-set-uri: https://${AUTH_DOMAIN}/.well-known/jwks.json
+          issuer-uri: https://${AUTH_DOMAIN}/
