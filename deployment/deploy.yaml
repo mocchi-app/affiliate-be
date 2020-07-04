@@ -1,0 +1,50 @@
+- name: Deploy Brand BE service
+  hosts: all
+  gather_facts: yes
+  vars:
+    timestamp: "{{ ansible_date_time.epoch }}"
+  tasks:
+    - name: Deployment block
+      block:
+        - name: Create deployment folder
+          file:
+            path: ~/deploy-{{ timestamp }}
+            state: directory
+
+        - name: Clone deployment repo
+          git:
+            repo: 'https://github.com/mocchi-app/mocchi-deployment.git'
+            dest: ~/deploy-{{ timestamp }}
+
+        - name: Start up database
+          docker_compose:
+            project_src: ~/deploy-{{ timestamp }}
+            project_name: mocchi
+            services: postgres-affiliate
+            state: present
+          environment:
+            POSTGRES_AFFILIATE_USER: "{{ lookup('env', 'POSTGRES_AFFILIATE_USER') }}"
+            POSTGRES_AFFILIATE_PASSWORD: "{{ lookup('env', 'POSTGRES_AFFILIATE_PASSWORD') }}"
+            POSTGRES_AFFILIATE_DB: "{{ lookup('env', 'POSTGRES_AFFILIATE_DB') }}"
+
+        - name: Start up application
+          docker_compose:
+            project_src: ~/deploy-{{ timestamp }}
+            project_name: mocchi
+            services: affiliate-be
+            state: present
+            pull: yes
+            restarted: true
+          environment:
+            POSTGRES_AFFILIATE_USER: "{{ lookup('env', 'POSTGRES_AFFILIATE_USER') }}"
+            POSTGRES_AFFILIATE_PASSWORD:  "{{ lookup('env', 'POSTGRES_AFFILIATE_PASSWORD') }}"
+            POSTGRES_AFFILIATE_DB: "{{ lookup('env', 'POSTGRES_AFFILIATE_DB') }}"
+            AUTH_DOMAIN: "{{ lookup('env', 'AUTH_DOMAIN') }}"
+            AUTH_CLIENT_ID: "{{ lookup('env', 'AUTH_CLIENT_ID') }}"
+            AUTH_CLIENT_SECRET: "{{ lookup('env', 'AUTH_CLIENT_SECRET') }}"
+
+      always:
+        - name: Remove deployment folder
+          file:
+            path: ~/deploy-{{ timestamp }}
+            state: absent
