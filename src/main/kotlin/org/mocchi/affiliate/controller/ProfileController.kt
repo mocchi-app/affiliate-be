@@ -31,7 +31,7 @@ class ProfileController(
             .principal
             .takeIf { it is Jwt }
             ?.let { it as Jwt }
-            ?.let { it.claims["key"] as String }
+            ?.let { it.claims["name"] as String }
             ?.let {
                 imageService.storeImage(it, file.awaitFirst())
             }
@@ -44,6 +44,6 @@ class ProfileController(
             .principal
             .takeIf { it is Jwt }
             ?.let { it as Jwt }
-            ?.let { it.claims["key"] as String }
+            ?.let { it.claims["name"] as String }
             ?.let { imageService.getImage(it) }
 }
