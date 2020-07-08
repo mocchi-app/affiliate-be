@@ -5,6 +5,7 @@ import org.mocchi.affiliate.configuration.AuthProperties
 import org.mocchi.affiliate.model.client.AuthParams
 import org.mocchi.affiliate.model.client.PasswordlessConfiguration
 import org.mocchi.affiliate.model.client.TokenRequestBody
+import org.mocchi.affiliate.model.client.TokenResponse
 import org.mocchi.affiliate.model.dto.ConfirmCodeDto
 import org.mocchi.affiliate.model.dto.PasswordlessDto
 import org.springframework.stereotype.Service
@@ -30,7 +31,7 @@ class Auth0Service(
             )
         )
 
-    suspend fun getToken(confirmCodeDto: ConfirmCodeDto) =
+    suspend fun getToken(confirmCodeDto: ConfirmCodeDto): TokenResponse =
         passwordlessLoginClient.getToken(
             authProperties.domain,
             TokenRequestBody(

@@ -1,0 +1,12 @@
+auth0:
+  domain: fake.com
+  clientId: fake
+  clientSecret: fake
+
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: https://fake.com/.well-known/jwks.json
+          issuer-uri: https://fake.com/
