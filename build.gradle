@@ -79,7 +79,7 @@ compileTestKotlin {
 }
 
 flyway {
-    url = 'jdbc:postgresql://localhost:5432/mocchi-affiliate'
+    url = 'jdbc:postgresql://localhost:5434/mocchi-affiliate'
     user = 'mocchi-affiliate'
     password = 'mocchi-affiliate'
     schemas = ['public']

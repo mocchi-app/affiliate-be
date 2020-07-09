@@ -9,6 +9,10 @@ data class UserProfile(
     val id: Long,
     @Column("email")
     val email: String,
+    @Column("about")
+    val about: String? = null,
+    @Column("location")
+    val location: String? = null,
     @Column("image")
     val image: ByteArray?
 )
@@ -17,6 +21,10 @@ data class UserProfile(
 data class UserProfileInsert(
     @Column("email")
     val email: String,
+    @Column("about")
+    val about: String? = null,
+    @Column("location")
+    val location: String? = null,
     @Column("image")
     val image: ByteArray? = null
 )

@@ -22,7 +22,7 @@ internal class UserProfileRepositoryTest : AbstractIntegrationTest() {
                     email = email
                 )
             )
-            val expected = UserProfile(1, email, null)
+            val expected = UserProfile(id = 1, email = email, image = null)
             assertThat(actual)
                 .isEqualToIgnoringGivenFields(expected, "id")
         }
@@ -37,7 +37,7 @@ internal class UserProfileRepositoryTest : AbstractIntegrationTest() {
                     email = email
                 )
             )
-            val expected = UserProfile(1, email, null)
+            val expected = UserProfile(id = 1, email = email, image = null)
             val actual = userProfileRepository.findUserProfileByEmail(email)
             assertThat(actual)
                 .isEqualToIgnoringGivenFields(expected, "id")
@@ -61,7 +61,7 @@ internal class UserProfileRepositoryTest : AbstractIntegrationTest() {
                 UserProfileInsert(email = email)
             )
             val image = ByteArray(1000)
-            val expected = UserProfile(inserted.id, email, image)
+            val expected = UserProfile(id = inserted.id, email = email, image = image)
 
             val actual = userProfileRepository.updateImage(inserted.id, image)
             assertThat(actual).isEqualTo(1)
@@ -75,6 +75,49 @@ internal class UserProfileRepositoryTest : AbstractIntegrationTest() {
 
     @Test
     fun `should not update image for user profile as it doesn't exist`() {
+        runBlocking {
+            val image = ByteArray(1000)
+
+            val actual = userProfileRepository.updateImage(-1, image)
+            assertThat(actual).isEqualTo(0)
+        }
+    }
+
+    @Test
+    fun `should update profile for user profile`() {
+        runBlocking {
+            val email = "email"
+            val inserted = userProfileRepository.insertNewEmail(
+                UserProfileInsert(email = email)
+            )
+            val image = ByteArray(1000)
+            val expected = UserProfile(
+                id = inserted.id,
+                about = "about",
+                location = "location",
+                email = email,
+                image = image
+            )
+
+            val actual = userProfileRepository.updateProfile(
+                inserted.id,
+                UserProfileInsert(
+                    email = email,
+                    about = expected.about,
+                    location = expected.location
+                )
+            )
+            assertThat(actual).isEqualTo(1)
+
+            val actualAfterUpdate = userProfileRepository.findUserProfileByEmail(email)
+            assertThat(actualAfterUpdate)
+                .isEqualToIgnoringGivenFields(expected, "image")
+                .hasNoNullFieldsOrProperties()
+        }
+    }
+
+    @Test
+    fun `should not update profile for user profile as it doesn't exist`() {
         runBlocking {
             val image = ByteArray(1000)
 

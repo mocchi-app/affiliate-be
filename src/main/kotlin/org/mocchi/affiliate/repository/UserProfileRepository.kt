@@ -42,4 +42,16 @@ class UserProfileRepository(
             .rowsUpdated()
             .awaitFirst()
 
+    suspend fun updateProfile(userId: Long, userProfileInsert: UserProfileInsert): Int =
+        databaseClient.update()
+            .table("user_profile")
+            .using(
+                Update.update("about", userProfileInsert.about)
+                    .set("location", userProfileInsert.location)
+            )
+            .matching(Criteria.where("up_id").`is`(userId))
+            .fetch()
+            .rowsUpdated()
+            .awaitFirst()
+
 }
