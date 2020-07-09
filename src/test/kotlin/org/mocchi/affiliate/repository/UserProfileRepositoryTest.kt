@@ -69,7 +69,7 @@ internal class UserProfileRepositoryTest : AbstractIntegrationTest() {
             val actualAfterUpdate = userProfileRepository.findUserProfileByEmail(email)
             assertThat(actualAfterUpdate)
                 .isEqualToIgnoringGivenFields(expected, "image")
-                .hasNoNullFieldsOrProperties()
+            assertThat(actualAfterUpdate?.image).isNotNull()
         }
     }
 
@@ -112,7 +112,7 @@ internal class UserProfileRepositoryTest : AbstractIntegrationTest() {
             val actualAfterUpdate = userProfileRepository.findUserProfileByEmail(email)
             assertThat(actualAfterUpdate)
                 .isEqualToIgnoringGivenFields(expected, "image")
-                .hasNoNullFieldsOrProperties()
+                .hasNoNullFieldsOrPropertiesExcept("image")
         }
     }
 
