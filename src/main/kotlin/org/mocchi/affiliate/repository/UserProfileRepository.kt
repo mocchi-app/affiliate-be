@@ -33,6 +33,15 @@ class UserProfileRepository(
             .map { userProfileConverter.convert(it) }
             .awaitFirst()
 
+    suspend fun updateStripeAccountId(userId: Long, accountId: String): Int =
+        databaseClient.update()
+            .table("user_profile")
+            .using(Update.update("stripe_account_id", accountId))
+            .matching(Criteria.where("up_id").`is`(userId))
+            .fetch()
+            .rowsUpdated()
+            .awaitFirst()
+
     suspend fun updateImage(userId: Long, image: ByteArray): Int =
         databaseClient.update()
             .table("user_profile")

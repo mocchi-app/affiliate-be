@@ -5,7 +5,9 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import io.ktor.client.HttpClient
+import io.ktor.client.HttpClientConfig
 import io.ktor.client.engine.cio.CIO
+import io.ktor.client.engine.cio.CIOEngineConfig
 import io.ktor.client.features.json.JacksonSerializer
 import io.ktor.client.features.json.JsonFeature
 import io.ktor.client.features.logging.DEFAULT
@@ -18,8 +20,26 @@ import org.springframework.context.annotation.Configuration
 @Configuration
 class HttpClientConfiguration {
 
+    companion object {
+        const val CONNECT_STRIPE_API_BASE = "connect.stripe.com"
+    }
+
     @Bean
     fun auth0Client() = HttpClient(CIO) {
+        installBasicHttpClient()
+    }
+
+    @Bean
+    fun stripeHttpClient() = HttpClient(CIO) {
+        engine {
+            https {
+                serverName = CONNECT_STRIPE_API_BASE
+            }
+        }
+        installBasicHttpClient()
+    }
+
+    private fun HttpClientConfig<CIOEngineConfig>.installBasicHttpClient() {
         install(JsonFeature) {
             serializer = JacksonSerializer(
                 ObjectMapper()

@@ -8,6 +8,7 @@ class UserProfileConverter : Converter<Map<String, Any>, UserProfile> {
     override fun convert(source: Map<String, Any>): UserProfile = UserProfile(
         id = extractFromResultSet(source, "up_id"),
         email = extractFromResultSet(source, "email"),
-        image = extractFromResultSet(source, "image")
+        image = extractFromResultSet(source, "image"),
+        stripeAccountId = extractFromResultSet(source, "stripe_account_id")
     )
 }
