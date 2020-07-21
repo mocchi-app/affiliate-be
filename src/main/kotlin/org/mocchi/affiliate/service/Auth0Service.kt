@@ -1,6 +1,6 @@
 package org.mocchi.affiliate.service
 
-import org.mocchi.affiliate.cleint.PasswordlessLoginClient
+import org.mocchi.affiliate.client.PasswordlessLoginClient
 import org.mocchi.affiliate.configuration.AuthProperties
 import org.mocchi.affiliate.model.client.AuthParams
 import org.mocchi.affiliate.model.client.PasswordlessConfiguration

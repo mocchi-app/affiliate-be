@@ -63,13 +63,4 @@ class ProfileController(
                     location = it.location
                 )
             }
-
-    private suspend fun getEmailFromContext() =
-        ReactiveSecurityContextHolder.getContext()
-            .awaitFirst()
-            .authentication
-            .principal
-            .takeIf { it is Jwt }
-            ?.let { it as Jwt }
-            ?.let { it.claims["name"] as String }
 }

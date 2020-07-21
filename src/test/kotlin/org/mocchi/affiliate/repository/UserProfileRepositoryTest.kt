@@ -22,7 +22,7 @@ internal class UserProfileRepositoryTest : AbstractIntegrationTest() {
                     email = email
                 )
             )
-            val expected = UserProfile(id = 1, email = email, image = null)
+            val expected = UserProfile(id = 1, email = email, image = null, stripeAccountId = null)
             assertThat(actual)
                 .isEqualToIgnoringGivenFields(expected, "id")
         }
@@ -37,7 +37,7 @@ internal class UserProfileRepositoryTest : AbstractIntegrationTest() {
                     email = email
                 )
             )
-            val expected = UserProfile(id = 1, email = email, image = null)
+            val expected = UserProfile(id = 1, email = email, image = null, stripeAccountId = null)
             val actual = userProfileRepository.findUserProfileByEmail(email)
             assertThat(actual)
                 .isEqualToIgnoringGivenFields(expected, "id")
@@ -61,7 +61,7 @@ internal class UserProfileRepositoryTest : AbstractIntegrationTest() {
                 UserProfileInsert(email = email)
             )
             val image = ByteArray(1000)
-            val expected = UserProfile(id = inserted.id, email = email, image = image)
+            val expected = UserProfile(id = inserted.id, email = email, image = image, stripeAccountId = null)
 
             val actual = userProfileRepository.updateImage(inserted.id, image)
             assertThat(actual).isEqualTo(1)
@@ -74,11 +74,40 @@ internal class UserProfileRepositoryTest : AbstractIntegrationTest() {
     }
 
     @Test
+    fun `should update stripe account id for user profile`() {
+        runBlocking {
+            val email = "email"
+            val inserted = userProfileRepository.insertNewEmail(
+                UserProfileInsert(email = email)
+            )
+            val stripeId = "stripeId"
+            val expected = UserProfile(id = inserted.id, email = email, image = null, stripeAccountId = stripeId)
+
+            val actual = userProfileRepository.updateStripeAccountId(inserted.id, stripeId)
+            assertThat(actual).isEqualTo(1)
+
+            val actualAfterUpdate = userProfileRepository.findUserProfileByEmail(email)
+            assertThat(actualAfterUpdate)
+                .isEqualToIgnoringGivenFields(expected)
+        }
+    }
+
+    @Test
     fun `should not update image for user profile as it doesn't exist`() {
         runBlocking {
             val image = ByteArray(1000)
 
             val actual = userProfileRepository.updateImage(-1, image)
+            assertThat(actual).isEqualTo(0)
+        }
+    }
+
+    @Test
+    fun `should not update stripe account id for user profile as it doesn't exist`() {
+        runBlocking {
+            val stripeId = "stripeId"
+
+            val actual = userProfileRepository.updateStripeAccountId(-1, stripeId)
             assertThat(actual).isEqualTo(0)
         }
     }
@@ -96,7 +125,8 @@ internal class UserProfileRepositoryTest : AbstractIntegrationTest() {
                 about = "about",
                 location = "location",
                 email = email,
-                image = image
+                image = image,
+                stripeAccountId = null
             )
 
             val actual = userProfileRepository.updateProfile(
@@ -112,7 +142,7 @@ internal class UserProfileRepositoryTest : AbstractIntegrationTest() {
             val actualAfterUpdate = userProfileRepository.findUserProfileByEmail(email)
             assertThat(actualAfterUpdate)
                 .isEqualToIgnoringGivenFields(expected, "image")
-                .hasNoNullFieldsOrPropertiesExcept("image")
+                .hasNoNullFieldsOrPropertiesExcept("image", "stripeAccountId")
         }
     }
 

@@ -14,7 +14,9 @@ data class UserProfile(
     @Column("location")
     val location: String? = null,
     @Column("image")
-    val image: ByteArray?
+    val image: ByteArray?,
+    @Column("stripe_account_id")
+    val stripeAccountId: String?
 )
 
 @Table("user_profile")
@@ -26,5 +28,7 @@ data class UserProfileInsert(
     @Column("location")
     val location: String? = null,
     @Column("image")
-    val image: ByteArray? = null
+    val image: ByteArray? = null,
+    @Column("stripe_account_id")
+    val stripeAccountId: String? = null
 )

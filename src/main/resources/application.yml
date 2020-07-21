@@ -3,6 +3,9 @@ db:
   username: ${JDBC_DATABASE_USERNAME:mocchi-affiliate}
   password: ${JDBC_DATABASE_PASSWORD:mocchi-affiliate}
 
+stripe:
+  apiKey: ${STRIPE_API_KEY}
+  clientId: ${STRIPE_API_CLIENT_ID}
 
 auth0:
   domain: ${AUTH_DOMAIN}

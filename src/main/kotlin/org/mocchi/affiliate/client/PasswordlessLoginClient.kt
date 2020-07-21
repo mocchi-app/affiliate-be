@@ -1,4 +1,4 @@
-package org.mocchi.affiliate.cleint
+package org.mocchi.affiliate.client
 
 import io.ktor.client.HttpClient
 import io.ktor.client.request.header

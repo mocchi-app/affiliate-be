@@ -42,6 +42,8 @@
             AUTH_DOMAIN: "{{ lookup('env', 'AUTH_DOMAIN') }}"
             AUTH_CLIENT_ID: "{{ lookup('env', 'AUTH_CLIENT_ID') }}"
             AUTH_CLIENT_SECRET: "{{ lookup('env', 'AUTH_CLIENT_SECRET') }}"
+            STRIPE_API_KEY: "{{ lookup('env', 'STRIPE_API_KEY') }}"
+            STRIPE_API_CLIENT_ID:  "{{ lookup('env', 'STRIPE_API_CLIENT_ID') }}"
 
       always:
         - name: Remove deployment folder
