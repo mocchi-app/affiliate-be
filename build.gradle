@@ -13,9 +13,30 @@ import com.bmuschko.gradle.docker.tasks.image.*
 group 'org.mocchi.affiliate'
 version '1.0-SNAPSHOT'
 
+def gprusr
+def gprkey
+def githubProperties = new Properties()
+def properties = rootProject.file("github.properties")
+if (properties.exists()) {
+    githubProperties.load(new FileInputStream(properties))
+    gprusr = githubProperties["gprusr"]
+    gprkey = githubProperties["gprkey"]
+} else {
+    gprusr = System.getenv("GITHUB_USERNAME")
+    gprkey = System.getenv("GITHUB_TOKEN")
+}
+
 repositories {
     mavenCentral()
     maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local/' }
+    maven {
+        name = "GitHubPackages"
+        url = uri("https://maven.pkg.github.com/mocchi-app/mocchi-definitions/")
+        credentials {
+            username = gprusr
+            password = gprkey
+        }
+    }
 }
 
 dependencies {
@@ -25,6 +46,11 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-security"
     implementation('org.springframework.security:spring-security-oauth2-resource-server')
     implementation('org.springframework.security:spring-security-oauth2-jose')
+
+    implementation ("org.springframework.kafka:spring-kafka")
+    implementation ("com.github.daniel-shuy:kafka-protobuf-serde:2.2.0")
+
+    implementation ("org.mocchi:mocchi-definitions:d220de1")
 
     implementation 'io.r2dbc:r2dbc-postgresql:0.8.3.RELEASE'
     implementation 'io.r2dbc:r2dbc-pool:0.8.3.RELEASE'

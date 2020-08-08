@@ -13,6 +13,11 @@ auth0:
   clientSecret: ${AUTH_CLIENT_SECRET}
 
 spring:
+  kafka:
+    consumer:
+      group-id: affiliate
+      auto-offset-reset: earliest
+      bootstrap-servers: kafka:9092
   security:
     oauth2:
       resourceserver:
