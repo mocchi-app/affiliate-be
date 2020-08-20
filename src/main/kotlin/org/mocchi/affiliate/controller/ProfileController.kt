@@ -1,6 +1,8 @@
 package org.mocchi.affiliate.controller
 
 import kotlinx.coroutines.reactive.awaitFirst
+import org.mocchi.affiliate.controller.exception.ResourceNotFoundException
+import org.mocchi.affiliate.model.controller.ImageResponse
 import org.mocchi.affiliate.model.dto.ProfileInfo
 import org.mocchi.affiliate.model.dto.UserProfileResponse
 import org.mocchi.affiliate.service.ImageService
@@ -29,34 +31,33 @@ class ProfileController(
         consumes = [MediaType.MULTIPART_FORM_DATA_VALUE],
         produces = [MediaType.IMAGE_JPEG_VALUE]
     )
-    suspend fun submitProfile(@RequestPart("file") file: Mono<FilePart>) =
-        getEmailFromContext()
-            ?.let {
-                imageService.storeImage(it, file.awaitFirst())
-            }
+    suspend fun submitProfile(@RequestPart("file") file: Mono<FilePart>): ImageResponse =
+        ImageResponse(imageService.storeImage(getEmailFromContext(), file.awaitFirst()))
 
     @GetMapping("image", produces = [MediaType.IMAGE_JPEG_VALUE])
-    suspend fun getProfileImage() =
+    suspend fun getProfileImage(): ImageResponse =
         getEmailFromContext()
-            ?.let { imageService.getImage(it) }
+            .let { imageService.getImage(it) }
+            .let { ImageResponse(it) }
 
     @PutMapping(
         "profile",
         consumes = [MediaType.APPLICATION_JSON_VALUE],
         produces = [MediaType.APPLICATION_JSON_VALUE]
     )
-    suspend fun putProfileInfo(@RequestBody profileInfo: ProfileInfo) =
+    suspend fun putProfileInfo(@RequestBody profileInfo: ProfileInfo): Int =
         getEmailFromContext()
-            ?.let { profileService.updateUserProfile(it, profileInfo) }
+            .let { profileService.updateUserProfile(it, profileInfo) }
+
 
     @GetMapping(
         "profile",
         produces = [MediaType.APPLICATION_JSON_VALUE]
     )
-    suspend fun getProfile() =
+    suspend fun getProfile(): UserProfileResponse =
         getEmailFromContext()
-            ?.let { profileService.insertOrGetUser(it) }
-            ?.let {
+            .let { profileService.insertOrGetUser(it) }
+            .let {
                 UserProfileResponse(
                     email = it.email,
                     about = it.about,
