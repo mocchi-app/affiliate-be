@@ -1,6 +1,7 @@
 package org.mocchi.affiliate.controller
 
 import com.stripe.model.oauth.TokenResponse
+import org.mocchi.affiliate.controller.exception.ResourceNotFoundException
 import org.mocchi.affiliate.model.client.StripeTokenResponse
 import org.mocchi.affiliate.model.dto.CompleteStripeConnect
 import org.mocchi.affiliate.model.dto.RedirectResponse
@@ -18,15 +19,15 @@ class StripeController(
 ) {
 
     @GetMapping("init")
-    suspend fun initConnect(): RedirectResponse? =
+    suspend fun initConnect(): RedirectResponse =
         getEmailFromContext()
-            ?.let { stripeService.initConnect(it) }
-            ?.let { RedirectResponse(it) }
+            .let { stripeService.initConnect(it) }
+            .let { RedirectResponse(it) }
 
     @PostMapping("complete")
-    suspend fun completeConnect(@RequestBody completeStripeConnect: CompleteStripeConnect): StripeTokenResponse? =
+    suspend fun completeConnect(@RequestBody completeStripeConnect: CompleteStripeConnect): StripeTokenResponse =
         getEmailFromContext()
-            ?.let {
+            .let {
                 stripeService.completeConnect(
                     email = it,
                     code = completeStripeConnect.code,
